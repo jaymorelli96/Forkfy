@@ -1,5 +1,5 @@
 {
-  "name": " ",
+  "name": "forkfy",
   "version": "0.0.1",
   "description": "",
   "keywords": "",
@@ -12,6 +12,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.4"
-  }
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.32.12"
+  },
+  "browserslist": [
+    "last 3 and_chr versions",
+    "last 3 chrome versions",
+    "last 3 opera versions",
+    "last 3 ios_saf versions",
+    "last 3 safari versions"
+  ]
 }
