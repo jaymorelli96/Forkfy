@@ -1,3 +1,6 @@
+import * as model from './model';
+import recipeView from './views/recipeView'
+
 import icons from '../img/icons.svg'
 import 'core-js/stable';
 import 'regenerator-runtime/runtime'
@@ -34,30 +37,20 @@ const renderSpinner = function (parentEl) {
 
 //Display recipe.
 const showRecipe = async function () {
-  //// (1) Load Recipe
-  //Render spinner
-  renderSpinner(recipeContainer);
+
   //Try to fetch the API
   try {
-    const res = await fetch('https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886');
-    const data = await res.json()
+    const id = window.location.hash.slice(1);
 
-    //Throw a error in case of a failure
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`)
+    if(!id) return;
 
-    //Store recipe in a varible
-    let {recipe} = data.data;
-    recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients
-    }
-
+    //Render spinner
+    renderSpinner(recipeContainer);
+    
+    //// (1) Load Recipe
+    await model.loadRecipe(id);
+    const {recipe} = model.state;
+    
     //// (2) Render Recipe
     const markUp = `
   <figure class="recipe__fig">
@@ -156,5 +149,13 @@ const showRecipe = async function () {
   }
 }
 
-showRecipe();
+
+let eventsArr = ['load', 'hashchange'];
+
+eventsArr.forEach(ev => window.addEventListener(ev, showRecipe));
+
+// ['hashchange', 'load'].forEach(element => {
+//   window.addEventListener(element, showRecipe);
+//   console.log('oi');
+// });
 
