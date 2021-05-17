@@ -55,7 +55,3 @@ export const loadSearchResults = async function(query) {
 }
 
 
-
-loadSearchResults('pizza');
-
-
