@@ -9,7 +9,7 @@ import 'regenerator-runtime/runtime'
 
 ///////////////////////////////////////
 //Display recipe.
-const controllRecipe = async function () {
+const controlRecipe = async function () {
 
   //Try to fetch the API
   try {
@@ -32,13 +32,8 @@ const controllRecipe = async function () {
   }
 }
 
+const init = function () {
+  recipeView.addHandlerRender(controlRecipe); //publish-subscriber pattern
+}
 
-let eventsArr = ['load', 'hashchange'];
-
-eventsArr.forEach(ev => window.addEventListener(ev, controllRecipe));
-
-// ['hashchange', 'load'].forEach(element => {
-//   window.addEventListener(element, showRecipe);
-//   console.log('oi');
-// });
-
+init();
