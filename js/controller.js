@@ -2,11 +2,13 @@ import * as model from './model';
 import recipeView from './views/recipeView'
 import SearchView from './views/searchView'
 import ResultsView from './views/resultsView'
+import PaginationView from './views/paginationView'
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime'
 import searchView from './views/searchView';
 import resultsView from './views/resultsView';
+import paginationView from './views/paginationView';
 
 if(module.hot) 
 {
@@ -34,7 +36,6 @@ const controlRecipe = async function () {
     
     //// (2) Render Recipe
     recipeView.render(model.state.recipe);
-    
 
   } catch (err) {
     recipeView.renderError();
@@ -54,17 +55,37 @@ const controlSearchResults = async function() {
     await model.loadSearchResults(query);
 
     //render results
-    resultsView.render(model.state.search.results)
-  } catch(err) {
+    // resultsView.render(model.state.search.results)
+    resultsView.render(model.getSearchResultsPage());
+    
+    //render initial pagination buttons
+    paginationView.render(model.state.search);
 
+  } catch(err) {
+    
   }
 }
-controlSearchResults();
+
+const controlPagination = function(page)  {
+  resultsView.render(model.getSearchResultsPage(page));
+  paginationView.render(model.state.search);
+}
+
+const controlServings = function(newServings) {
+  //update recipe servings
+  model.updateServings(newServings);
+
+  //update recipe view
+  recipeView.render(model.state.recipe)
+}
 
 //publish-subscriber pattern
 const init = function () {
   recipeView.addHandlerRender(controlRecipe); 
+  recipeView.addHandlerUpdateServings(controlServings);
   searchView.addHandlerSearch(controlSearchResults);
+  paginationView.addHandlerClick(controlPagination);
+
 }
 
 init();
