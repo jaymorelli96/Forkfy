@@ -27,7 +27,7 @@ export default class View {
         //Compare and change the content
         newElements.forEach((newEl, i) => {
             const curElement = curElements[i]; 
-            if(!newEl.isEqualNode(curElement) && newEl.firstChild.nodeValue.trim() !== '')
+            if(!newEl.isEqualNode(curElement) && newEl.firstChild?.nodeValue.trim() !== '')
             {
                 curElement.textContent = newEl.textContent;
             }

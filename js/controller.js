@@ -52,7 +52,7 @@ const controlSearchResults = async function() {
     if (!query) return;
 
     //Render spinner
-    // ResultsView.renderSpinner();
+    ResultsView.renderSpinner();
 
     //load search results
     await model.loadSearchResults(query);
@@ -84,13 +84,22 @@ const controlServings = function(newServings) {
 
 }
 
+const controlAddBookmark = function()
+{
+  if(!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
+  else if(model.state.recipe.bookmarked) model.deleteBookmark(model.state.recipe.id);
+  console.log(model.state.recipe.bookmarked);
+  recipeView.update(model.state.recipe);
+}
+
+
 //publish-subscriber pattern
 const init = function () {
   recipeView.addHandlerRender(controlRecipe); 
   recipeView.addHandlerUpdateServings(controlServings);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
-
+  recipeView.addHandlerAddBookmark(controlAddBookmark);
 }
 
 init();
