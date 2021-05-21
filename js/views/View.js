@@ -12,6 +12,37 @@ export default class View {
         this._parentEl.insertAdjacentHTML(position, data);
     }
 
+    update(data)
+    {
+
+        this._data = data;
+        const newMarkup = this._generateMarkup();
+
+        //Create a new dom from the new markup so it can be compared with the current dom obj
+        const newDOM = document.createRange().createContextualFragment(newMarkup);
+        const newElements = Array.from(newDOM.querySelectorAll('*'));
+        const curElements = Array.from(this._parentEl.querySelectorAll('*'));
+        
+
+        //Compare and change the content
+        newElements.forEach((newEl, i) => {
+            const curElement = curElements[i]; 
+            if(!newEl.isEqualNode(curElement) && newEl.firstChild.nodeValue.trim() !== '')
+            {
+                curElement.textContent = newEl.textContent;
+            }
+            
+            
+            //Change attr
+            if(!newEl.isEqualNode(curElement))
+            {
+                Array.from(newEl.attributes).forEach(attr => curElement.setAttribute(attr.name, attr.value))
+            }
+        });
+
+
+    }
+
     render(data) {
         if(!data || (Array.isArray(data) && data.length == 0)) return this.renderError();
 
